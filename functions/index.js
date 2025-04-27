@@ -31,9 +31,9 @@ exports.sendWhatsapp = functions.onRequest(async (req, res) => {
         headers: { Authorization: `Bearer ${TOKEN}` }
       }
     );
-    res.status(200).send('Mensaje enviado');
+    res.status(200).send('Mensaje enviado exitosamente');
   } catch (error) {
-    console.error('Error al enviar mensaje:', error);
-    res.status(500).send('Error al enviar mensaje');
+    console.error(error.response ? error.response.data : error.message);
+    res.status(500).send('Error enviando mensaje');
   }
 });
