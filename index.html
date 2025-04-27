@@ -1,233 +1,156 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Recepción · Intrack360</title>
-<link rel="preconnect" href="https://fonts.gstatic.com">
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Recepción – Intrack360</title>
+<link rel="icon" href="favicon.ico">
 <style>
-  *{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f4;margin:0;padding:20px;}
-  h1{text-align:center;color:#1976d2;margin-top:0}
-  .card{background:#fff;padding:20px;margin:auto;max-width:760px;box-shadow:0 2px 5px rgba(0,0,0,.1);border-radius:8px}
-  label{display:block;font-weight:bold;margin-top:12px}
-  input,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;margin-top:4px}
-  input[readonly]{background:#e9e9e9}
-  button{background:#1976d2;color:#fff;padding:10px 15px;border:none;border-radius:4px;cursor:pointer;margin-top:14px}
-  button:hover{background:#135ba1}
-  .legend{background:#e0f7fa;padding:10px;border-left:5px solid #00796b;border-radius:4px;margin-bottom:18px}
-  .clauses{background:#f0f0f0;padding:15px;border-left:4px solid #1976d2;border-radius:5px;margin-top:16px}
-  textarea{resize:vertical}
-  canvas{border:1px solid #ccc;border-radius:4px;margin-top:6px}
+*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f4;margin:0;padding:20px}
+h1{color:#1976d2;text-align:center;margin-top:0}
+.card{background:#fff;padding:22px;margin:auto;max-width:780px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+label{font-weight:bold;margin-top:12px;display:block}input,textarea{width:100%;padding:8px;margin-top:4px;border:1px solid #ccc;border-radius:4px}
+input[readonly]{background:#e9e9e9}button{background:#1976d2;color:#fff;border:none;padding:12px 18px;border-radius:4px;cursor:pointer;margin-top:14px}
+button:hover{background:#135ba1}.legend{background:#e0f7fa;padding:10px;border-left:5px solid #00796b;border-radius:4px;margin-bottom:18px}
+textarea{resize:vertical}canvas{border:1px solid #ccc;border-radius:4px;margin-top:6px}
 </style>
-</head>
-<body>
-
+</head><body>
 <h1>🛠 Recepción – Intrack360</h1>
 <div class="card">
-  <!-- Leyenda -->
-  <div class="legend"><strong>Nota:</strong> Todos los campos son editables antes de firmar; solo se guardarán los conceptos seleccionados.</div>
+  <div class="legend"><b>Nota:</b> edita conceptos y cláusulas; solo se guardará lo seleccionado.</div>
 
-  <!-- Datos cliente & vehículo -->
-  <label>Folio asignado</label><input id="folio" readonly>
-  <label>Nombre del cliente</label><input id="nombreCliente" placeholder="Juan Pérez">
+  <!-- Datos -->
+  <label>Folio</label><input id="folio" readonly>
+  <label>Cliente</label><input id="nombreCliente" placeholder="Juan Pérez">
   <label>Teléfono</label><input id="telefonoCliente" placeholder="3111234567">
   <label>Población</label><input id="poblacionCliente" placeholder="Ciudad">
 
-  <label>Placas</label><input id="placasVehiculo" placeholder="ABC1234" onblur="buscarPlacas()">
-  <label>Marca</label><input id="marcaVehiculo" placeholder="Nissan">
-  <label>Modelo</label><input id="modeloVehiculo" placeholder="Sentra">
-  <label>Año</label><input id="anioVehiculo" placeholder="2015">
-  <label>Motor</label><input id="motorVehiculo" placeholder="1.8L">
-  <label>Cilindrada</label><input id="cilindradaVehiculo" placeholder="4 cilindros">
+  <!-- Vehículo -->
+  <label>Placas</label><input id="placas" placeholder="ABC1234" onblur="buscarPlacas()">
+  <label>Marca</label><input id="marca">
+  <label>Modelo</label><input id="modelo">
+  <label>Año</label><input id="anio">
+  <label>Motor</label><input id="motor">
+  <label>Cilindrada</label><input id="cilindrada">
 
-  <!-- Presupuesto / tiempo -->
-  <label>Presupuesto estimado / Tiempo estimado de entrega</label>
-  <input id="presupuesto" placeholder="$8 000 MXN / 3 días">
-
-  <!-- Conceptos de trabajo (10 ejemplos, todos editables + check) -->
-  <label>Conceptos de trabajo (selecciona y edita los que apliquen)</label>
+  <!-- Conceptos -->
+  <label>Conceptos de trabajo</label>
   <div id="conceptos"></div>
 
-  <!-- Observaciones -->
-  <label>Observaciones</label>
-  <textarea id="observaciones" rows="3" placeholder="Notas adicionales..."></textarea>
+  <label>Presupuesto / Tiempo estimado</label>
+  <input id="presupuesto" placeholder="$8 000 MXN / 3 días">
+
+  <label>Observaciones</label><textarea id="observaciones" rows="3"></textarea>
 
   <!-- Cláusulas -->
-  <div class="clauses" id="bloqueClausulas">
-    <textarea rows="3">1. El taller no se hace responsable por objetos no declarados al momento de la recepción.</textarea>
-    <textarea rows="3">2. En caso de no aceptar el presupuesto, se cobrará diagnóstico.</textarea>
-    <textarea rows="3">3. Pasadas 24 h de notificado el término se cobrará pensión diaria de $50.00 MXN.</textarea>
+  <div id="clausulas" class="legend" style="background:#f0f0f0;border-left:4px solid #1976d2">
+    <textarea rows="3">1. El taller no se hace responsable por objetos no declarados.</textarea>
+    <textarea rows="3">2. Si no se acepta el presupuesto se cobrará diagnóstico.</textarea>
+    <textarea rows="3">3. Pasadas 24 h de notificado, pensión de $50 MXN diarios.</textarea>
   </div>
 
   <!-- Firma -->
   <label>Firma del cliente</label>
-  <canvas id="firmaCanvas" width="550" height="120"></canvas>
-  <button onclick="firmaPad.clear()">Borrar firma</button>
+  <canvas id="firma" width="560" height="140"></canvas><br>
+  <button onclick="pad.clear()">Borrar firma</button>
 
-  <!-- Botón final -->
+  <!-- Final -->
   <button onclick="generarPDF()">📄 Generar PDF y subir</button>
 </div>
 
-<!-- SDKs Firebase compat -->
+<!-- Firebase compat -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-<!-- SignaturePad + jsPDF + html2canvas -->
+<!-- librerías -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.0.6/signature_pad.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-/* === TU configuración Firebase === */
-const firebaseConfig = {
-  apiKey: "AIzaSyBJYNTP1IopR4bQo5q8D9mBGfp-CP3wPEc",
-  authDomain: "intrack360.firebaseapp.com",
-  projectId: "intrack360",
-  storageBucket: "intrack360.appspot.com",
-  messagingSenderId: "506102748165",
-  appId: "1:506102748165:web:05b23e79ff04806881b86c"
-};
-
+/* === 1. Configura con TU proyecto === */
+const firebaseConfig={apiKey:"TU_API_KEY",authDomain:"tu-proyecto.firebaseapp.com",projectId:"tu-proyecto",
+storageBucket:"tu-proyecto.appspot.com",messagingSenderId:"*********",appId:"1:*********:web:**********"};
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage();
+const db=firebase.firestore(),st=firebase.storage();
 
-/* === Generar folio consecutivo === */
-async function generarFolio() {
-  const q = db.collection('ordenesTrabajo').orderBy('folio','desc').limit(1);
-  const snap = await q.get();
-  let nuevo = 'TAL001-0001';
-  if(!snap.empty){
-    const ult = snap.docs[0].data().folio;
-    const n   = parseInt(ult.split('-')[1])+1;
-    nuevo = 'TAL001-'+n.toString().padStart(4,'0');
-  }
-  document.getElementById('folio').value = nuevo;
-}
-window.onload = () => {
-  generarFolio();
-  crearConceptos();
-};
+/* === 2. Conceptos demo === */
+const base=["Cambio de aceite","Diagnóstico de motor con escáner","Afinación mayor","Revisión de frenos",
+"Servicio de suspensión","Sincronización de distribución","Lavado de inyectores","Reemplazo de batería",
+"Revisión eléctrica","Reparación de clima"];
+base.forEach(t=>{
+  const id=t.toLowerCase().replace(/\s+/g,'_');
+  document.getElementById('conceptos').insertAdjacentHTML('beforeend',
+  `<label style="font-weight:normal"><input type="checkbox" id="c_${id}"> 
+   <input type="text" id="t_${id}" value="${t}" style="width:85%"></label>`);});
 
-/* === Conceptos base por giro (10) === */
-const conceptosBase = [
-  "Cambio de aceite y filtro",
-  "Diagnóstico de fallas de motor con escáner",
-  "Afinación mayor",
-  "Revisión de frenos",
-  "Cambio de balatas",
-  "Servicio de suspensión",
-  "SINCRONIZACIÓN DE DISTRIBUCIÓN",
-  "Lavado de inyectores",
-  "Reemplazo de batería",
-  "Revisión de sistema eléctrico"
-];
-function crearConceptos(){
-  const ctn = document.getElementById('conceptos');
-  conceptosBase.forEach(txt=>{
-    const id = txt.toLowerCase().replace(/\s+/g,'_');
-    ctn.insertAdjacentHTML('beforeend',
-      `<label style="font-weight:normal">
-         <input type="checkbox" id="chk_${id}"> 
-         <input type="text" value="${txt}" id="txt_${id}" style="width:88%">
-       </label>`
-    );
-  });
-}
+/* === 3. Firma === */
+const pad=new SignaturePad(document.getElementById('firma'));
 
-/* === Buscar por placas === */
+/* === 4. Folio autoincremental === */
+async function folioNuevo(){
+ const s=await db.collection('ordenesTrabajo').orderBy('folio','desc').limit(1).get();
+ let f='TAL001-0001';
+ if(!s.empty){const n=parseInt(s.docs[0].data().folio.split('-')[1])+1;f='TAL001-'+String(n).padStart(4,'0');}
+ document.getElementById('folio').value=f;}
+window.onload=folioNuevo;
+
+/* === 5. Buscar por placas === */
 async function buscarPlacas(){
-  const placas = document.getElementById('placasVehiculo').value
-                .trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  document.getElementById('placasVehiculo').value = placas;
-  if(!placas) return;
-  const snap = await db.collection('ordenesTrabajo')
-                       .where('placas','==',placas).limit(1).get();
-  if(!snap.empty){
-    const d = snap.docs[0].data();
-    document.getElementById('nombreCliente').value = d.nombreCliente;
-    document.getElementById('telefonoCliente').value = d.telefonoCliente;
-    document.getElementById('poblacionCliente').value = d.poblacionCliente;
-    document.getElementById('marcaVehiculo').value = d.marcaVehiculo;
-    document.getElementById('modeloVehiculo').value = d.modeloVehiculo;
-    document.getElementById('anioVehiculo').value = d.anioVehiculo;
-    document.getElementById('motorVehiculo').value = d.motorVehiculo;
-    document.getElementById('cilindradaVehiculo').value = d.cilindradaVehiculo;
-    alert('Datos cargados por placas.');
-  }
-}
-
-/* === Firma digital === */
-const firmaPad = new SignaturePad(document.getElementById('firmaCanvas'));
-
-/* === Generar PDF, subir a Storage y registrar === */
+ const p=document.getElementById('placas').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+ document.getElementById('placas').value=p;if(!p)return;
+ const q=await db.collection('ordenesTrabajo').where('placas','==',p).limit(1).get();
+ if(!q.empty){const d=q.docs[0].data();["nombreCliente","telefonoCliente","poblacionCliente",
+ "marca","modelo","anio","motor","cilindrada"].forEach(k=>{if(d[k])document.getElementById(k).value=d[k];});
+ alert('Datos cargados por placa');}}
+ 
+/* === 6. Generar PDF y subir === */
 async function generarPDF(){
-  if(firmaPad.isEmpty()){ alert('Falta firma'); return; }
+ if(pad.isEmpty()){alert('Falta firma');return;}
+ const folio=document.getElementById('folio').value;
 
-  const folio = document.getElementById('folio').value;
+ // previsualización
+ const prev=document.createElement('div');prev.style.padding='20px';
+ prev.innerHTML=document.querySelector('.card').innerHTML;
+ const img=new Image();img.src=pad.toDataURL();img.style.width='160px';prev.appendChild(img);
+ prev.style.position='fixed';prev.style.left='-9999px';document.body.appendChild(prev);
 
-  /* Construir preview dinámico */
-  const preview = document.createElement('div');
-  preview.style.padding = '20px';
-  preview.innerHTML = document.querySelector('.card').innerHTML;
-  /* inserta firma en preview */
-  const img = new Image(); img.src = firmaPad.toDataURL(); img.style.width='150px';
-  preview.appendChild(img);
+ const cvs=await html2canvas(prev,{scale:2});document.body.removeChild(prev);
+ const {jsPDF}=window.jspdf;const pdf=new jsPDF('p','pt','letter');
+ pdf.addImage(cvs,'PNG',20,20,560,0);const blob=pdf.output('blob');
 
-  /* Convertir a canvas → PDF */
-  const canvas = await html2canvas(preview,{scale:2});
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p','pt','letter');
-  pdf.addImage(canvas,'PNG',20,20,560,0);
+ const ref=st.ref().child(`recepciones/${folio}.pdf`);await ref.put(blob);
+ const url=await ref.getDownloadURL();
 
-  const blob = pdf.output('blob');
+ // selecciona conceptos marcados
+ const seleccion=base.filter(t=>{
+   const id=t.toLowerCase().replace(/\\s+/g,'_');
+   return document.getElementById('c_'+id).checked;});
 
-  /* Subir a Storage */
-  const ref = storage.ref().child(`recepciones/${folio}.pdf`);
-  await ref.put(blob);
-  const url = await ref.getDownloadURL();
-
-  /* Guardar datos orden */
-  await db.collection('ordenesTrabajo').add({
-    folio,
-    nombreCliente: document.getElementById('nombreCliente').value,
-    telefonoCliente: document.getElementById('telefonoCliente').value,
-    poblacionCliente: document.getElementById('poblacionCliente').value,
-    placas: document.getElementById('placasVehiculo').value,
-    marcaVehiculo: document.getElementById('marcaVehiculo').value,
-    modeloVehiculo: document.getElementById('modeloVehiculo').value,
-    anioVehiculo: document.getElementById('anioVehiculo').value,
-    motorVehiculo: document.getElementById('motorVehiculo').value,
-    cilindradaVehiculo: document.getElementById('cilindradaVehiculo').value,
-    presupuesto: document.getElementById('presupuesto').value,
-    observaciones: document.getElementById('observaciones').value,
-    pdfUrl: url,
-    fechaFirma: new Date().toISOString()
-  });
-
-  alert('Contrato generado y subido ✔️');
-
-  /* === Enviar por WhatsApp (opcional) ===
-  await sendWhatsApp(
-      document.getElementById('telefonoCliente').value,
-      document.getElementById('nombreCliente').value,
-      folio,
-      url
-  );*/
-  generarFolio(); // prepara la siguiente
+ await db.collection('ordenesTrabajo').add({
+   folio,
+   nombreCliente:document.getElementById('nombreCliente').value,
+   telefonoCliente:document.getElementById('telefonoCliente').value,
+   poblacionCliente:document.getElementById('poblacionCliente').value,
+   placas:document.getElementById('placas').value,
+   marca:document.getElementById('marca').value,
+   modelo:document.getElementById('modelo').value,
+   anio:document.getElementById('anio').value,
+   motor:document.getElementById('motor').value,
+   cilindrada:document.getElementById('cilindrada').value,
+   presupuesto:document.getElementById('presupuesto').value,
+   observaciones:document.getElementById('observaciones').value,
+   conceptos:seleccion,
+   pdfUrl:url,
+   fechaFirma:new Date().toISOString()
+ });
+ alert('PDF subido y orden guardada ✔️');folioNuevo();pad.clear();
+ /* === Para WhatsApp descomenta la línea siguiente y configura tu función === */
+ // await sendWhatsApp(document.getElementById('telefonoCliente').value,folio,url);
 }
 
-/* === Cloud Function WhatsApp (comentado) === */
-/*
-async function sendWhatsApp(telefono,nombre,folio,link){
-  await fetch('/send-whatsapp',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({to:`52${telefono}`,nombre,folio,link})
-  });
-}
-*/
+/* === 7. (Opc) WhatsApp Cloud Function ===
+async function sendWhatsApp(tel,folio,link){
+ await fetch('/send-whatsapp',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({to:`52${tel}`,folio,link})});
+}*/
 </script>
-</body>
-</html>
+</body></html>
