@@ -9,7 +9,6 @@
     "node": "18"
   },
   "scripts": {
-    "lint": "echo \"No lint configured\""
+    "lint": "echo \"No lint configured\" && exit 0"
   }
 }
-
