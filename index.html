@@ -1,55 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recepción de Vehículo - Intrack360</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recepción de Vehículos - Intrack360</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-      margin: 0;
       padding: 20px;
+      margin: 0;
     }
-    h1, h2 {
-      text-align: center;
-      color: #1976d2;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .logo {
-      text-align: right;
-      margin-bottom: 10px;
-    }
-    .logo img {
+    .header img {
       width: 100px;
     }
-    .nombre-taller {
+    h1 {
       text-align: center;
-      font-size: 1.4rem;
       color: #1976d2;
-      margin-bottom: 10px;
-      font-weight: bold;
     }
     form {
       background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
     }
-    input, select, textarea {
+    input, textarea, select {
       width: 100%;
-      padding: 10px;
       margin: 8px 0;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
+    }
+    .seccion {
+      margin-bottom: 20px;
+    }
+    .foto-preview {
+      max-height: 100px;
+      margin-top: 5px;
+      display: block;
     }
     button {
       background-color: #1976d2;
       color: white;
       border: none;
       padding: 10px 20px;
-      margin-top: 15px;
       border-radius: 5px;
       cursor: pointer;
     }
@@ -57,163 +58,150 @@
       background-color: #135ba1;
     }
     .small-text {
-      text-align: center;
-      font-size: 0.9rem;
       color: gray;
+      font-size: 0.9em;
+      margin-top: 10px;
     }
-    .preview-img {
-      max-height: 100px;
-      margin-top: 5px;
-      display: block;
+    .recuadro-evidencia {
+      border: 1px dashed #1976d2;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-<div class="logo">
-  <img src="https://github.com/intrack360/RECEPCION-DIGITAL-DE-VEHICULOS/blob/main/logo%20INTRACK%20360.png?raw=true" alt="Logo Intrack360" id="logoSistema">
+<div class="header">
+  <h1>Recepción de Vehículos</h1>
+  <img src="https://github.com/intrack360/RECEPCION-DIGITAL-DE-VEHICULOS/blob/main/logo%20INTRACK%20360.png?raw=true" alt="Logo Intrack360">
 </div>
 
-<div class="nombre-taller" id="nombreTaller">Taller</div>
+<form id="recepcionForm">
+  
+  <div class="seccion">
+    <h2>Datos del Cliente</h2>
+    <input type="text" id="nombreCliente" placeholder="Nombre completo" required>
+    <input type="text" id="telefonoCliente" placeholder="Teléfono" required>
+    <input type="text" id="poblacionCliente" placeholder="Población" required>
+  </div>
 
-<h1>Recepción de vehículo para reparación automotriz</h1>
+  <div class="seccion">
+    <h2>Datos del Vehículo</h2>
+    <input type="text" id="marcaVehiculo" placeholder="Marca" required>
+    <input type="text" id="modeloVehiculo" placeholder="Modelo" required>
+    <input type="text" id="anioVehiculo" placeholder="Año" required>
+    <input type="text" id="motorVehiculo" placeholder="Motor" required>
+    <input type="text" id="cilindradaVehiculo" placeholder="Cilindrada" required>
+    <input type="text" id="placasVehiculo" placeholder="Placas" required>
+  </div>
 
-<div class="small-text" id="fechaHoy"></div>
+  <div class="seccion">
+    <h2>Presupuesto y Anticipo</h2>
+    <input type="number" id="presupuesto" placeholder="Presupuesto estimado" required>
+    <input type="number" id="anticipo" placeholder="Anticipo recibido" required>
+    <input type="text" id="fechaEntregaEstimada" placeholder="Fecha estimada de entrega (opcional)">
+  </div>
 
-<form id="formRecepcion">
-  <label for="folioRecepcion">Folio de Recepción:</label>
-  <input type="text" id="folioRecepcion" readonly>
+  <div class="seccion">
+    <h2>Observaciones Generales</h2>
+    <textarea id="observaciones" rows="4" placeholder="Observaciones del cliente"></textarea>
+  </div>
 
-  <h2>Datos del Cliente</h2>
-  <input type="text" id="nombreCliente" placeholder="Nombre del Cliente" required>
-  <input type="text" id="telefonoCliente" placeholder="Teléfono" required>
-  <input type="text" id="poblacionCliente" placeholder="Población" required>
+  <div class="seccion">
+    <h2>Evidencias Fotográficas</h2>
+    
+    <div class="recuadro-evidencia">
+      <label>Foto Frente:</label><br>
+      <input type="file" id="fotoFrente" accept="image/*" capture="environment">
+      <img id="previewFrente" class="foto-preview" style="display:none;">
+    </div>
 
-  <h2>Datos del Vehículo</h2>
-  <input type="text" id="marcaVehiculo" placeholder="Marca" required>
-  <input type="text" id="modeloVehiculo" placeholder="Modelo" required>
-  <input type="text" id="anioVehiculo" placeholder="Año" required>
-  <input type="text" id="motorVehiculo" placeholder="Motor" required>
-  <input type="text" id="cilindradaVehiculo" placeholder="Cilindrada" required>
-  <input type="text" id="placasVehiculo" placeholder="Placas" required>
+    <div class="recuadro-evidencia">
+      <label>Foto Trasera:</label><br>
+      <input type="file" id="fotoTrasera" accept="image/*" capture="environment">
+      <img id="previewTrasera" class="foto-preview" style="display:none;">
+    </div>
 
-  <h2>Evidencias Fotográficas</h2>
+    <div class="recuadro-evidencia">
+      <label>Foto Lado Derecho:</label><br>
+      <input type="file" id="fotoDerecho" accept="image/*" capture="environment">
+      <img id="previewDerecho" class="foto-preview" style="display:none;">
+    </div>
 
-  <label>Foto Frente:</label>
-  <input type="file" accept="image/*" id="fotoFrente" capture="environment">
-  <img id="prevFotoFrente" class="preview-img" style="display:none;">
+    <div class="recuadro-evidencia">
+      <label>Foto Lado Izquierdo:</label><br>
+      <input type="file" id="fotoIzquierdo" accept="image/*" capture="environment">
+      <img id="previewIzquierdo" class="foto-preview" style="display:none;">
+    </div>
 
-  <label>Foto Trasera:</label>
-  <input type="file" accept="image/*" id="fotoTrasera" capture="environment">
-  <img id="prevFotoTrasera" class="preview-img" style="display:none;">
+    <div class="recuadro-evidencia">
+      <label>Foto Llaves:</label><br>
+      <input type="file" id="fotoLlaves" accept="image/*" capture="environment">
+      <img id="previewLlaves" class="foto-preview" style="display:none;">
+    </div>
 
-  <label>Foto Lado Derecho:</label>
-  <input type="file" accept="image/*" id="fotoDerecho" capture="environment">
-  <img id="prevFotoDerecho" class="preview-img" style="display:none;">
+    <div class="recuadro-evidencia">
+      <label>Foto Batería:</label><br>
+      <input type="file" id="fotoBateria" accept="image/*" capture="environment">
+      <img id="previewBateria" class="foto-preview" style="display:none;">
+    </div>
+  </div>
 
-  <label>Foto Lado Izquierdo:</label>
-  <input type="file" accept="image/*" id="fotoIzquierdo" capture="environment">
-  <img id="prevFotoIzquierdo" class="preview-img" style="display:none;">
+  <div class="seccion">
+    <h2>Video del Vehículo</h2>
+    <input type="file" id="videoVehiculo" accept="video/*" capture="environment">
+  </div>
 
-  <label>Foto Llaves del Vehículo:</label>
-  <input type="file" accept="image/*" id="fotoLlaves" capture="environment">
-  <img id="prevFotoLlaves" class="preview-img" style="display:none;">
+  <div class="seccion">
+    <h2>Cláusulas Generales</h2>
+    <textarea id="clausulas" rows="8" readonly>
+El taller no se hace responsable por elementos no declarados al momento de ingreso.
+No nos responsabilizamos por la integridad de piezas plásticas resecas, deterioradas o quebradizas del motor que puedan deshacerse al manipularse.
+Después de 24 horas de avisado de la terminación, o 72 horas de abandono, la pensión del vehículo será de $50.00 pesos por día.
+El taller no se hace responsable de daños meteorológicos, vandalismo o causas externas en autos abandonados.
+Estas cláusulas pueden ser modificadas en la configuración inicial del taller.
+    </textarea>
+  </div>
 
-  <label>Foto Batería del Vehículo:</label>
-  <input type="file" accept="image/*" id="fotoBateria" capture="environment">
-  <img id="prevFotoBateria" class="preview-img" style="display:none;">
-
-  <h2>Video de Vehículo (máx. 2 min)</h2>
-  <input type="file" accept="video/*" id="videoVehiculo" capture="environment">
-
-  <h2>Condiciones Generales (Cláusulas)</h2>
-  <textarea id="clausulasLegales" rows="8" readonly></textarea>
-
-  <button type="submit" id="guardarBtn">Guardar Recepción</button>
+  <button type="submit">Guardar Recepción</button>
 </form>
 
-<audio id="audioSuccess" src="https://assets.mixkit.co/active_storage/sfx/625/625-preview.mp3"></audio>
+<audio id="bipSuccess" src="https://assets.mixkit.co/active_storage/sfx/1106/1106-preview.mp3"></audio>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const fecha = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('fechaHoy').textContent = "Fecha: " + fecha;
+document.addEventListener('DOMContentLoaded', () => {
+  // Previsualización de imágenes
+  const previews = [
+    {input: 'fotoFrente', img: 'previewFrente'},
+    {input: 'fotoTrasera', img: 'previewTrasera'},
+    {input: 'fotoDerecho', img: 'previewDerecho'},
+    {input: 'fotoIzquierdo', img: 'previewIzquierdo'},
+    {input: 'fotoLlaves', img: 'previewLlaves'},
+    {input: 'fotoBateria', img: 'previewBateria'},
+  ];
 
-    const config = JSON.parse(localStorage.getItem('configuracionTaller'));
-    if (config) {
-      document.getElementById('nombreTaller').textContent = config.nombreTaller;
-      document.getElementById('logoSistema').src = config.logo;
-      document.getElementById('clausulasLegales').value = config.clausulas;
-    } else {
-      document.getElementById('nombreTaller').textContent = "Taller Automotriz";
-      document.getElementById('clausulasLegales').value = "No nos responsabilizamos por la integridad de piezas plásticas resecas, deterioradas o quebradizas del motor que puedan deshacerse al manipularse.";
-    }
-
-    generarFolio();
-  });
-
-  function generarFolio() {
-    let ultimoFolio = localStorage.getItem('ultimoFolio');
-    if (!ultimoFolio) {
-      ultimoFolio = 1;
-    } else {
-      ultimoFolio = parseInt(ultimoFolio) + 1;
-    }
-    localStorage.setItem('ultimoFolio', ultimoFolio);
-    document.getElementById('folioRecepcion').value = "INTR-" + String(ultimoFolio).padStart(3, '0');
-  }
-
-  function previsualizar(inputId, imgId) {
-    const input = document.getElementById(inputId);
-    const img = document.getElementById(imgId);
-    input.addEventListener('change', function() {
-      const file = input.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          img.src = e.target.result;
-          img.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
+  previews.forEach(preview => {
+    document.getElementById(preview.input).addEventListener('change', function() {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById(preview.img).src = e.target.result;
+        document.getElementById(preview.img).style.display = 'block';
       }
+      reader.readAsDataURL(this.files[0]);
     });
-  }
-
-  previsualizar('fotoFrente', 'prevFotoFrente');
-  previsualizar('fotoTrasera', 'prevFotoTrasera');
-  previsualizar('fotoDerecho', 'prevFotoDerecho');
-  previsualizar('fotoIzquierdo', 'prevFotoIzquierdo');
-  previsualizar('fotoLlaves', 'prevFotoLlaves');
-  previsualizar('fotoBateria', 'prevFotoBateria');
-
-  document.getElementById('formRecepcion').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    // Validar que haya fotos
-    const fotos = ['fotoFrente','fotoTrasera','fotoDerecho','fotoIzquierdo','fotoLlaves','fotoBateria'];
-    for (let id of fotos) {
-      if (!document.getElementById(id).files.length) {
-        alert('⚠️ Debes subir todas las evidencias fotográficas.');
-        return;
-      }
-    }
-    if (!document.getElementById('videoVehiculo').files.length) {
-      alert('⚠️ Debes subir el video del vehículo.');
-      return;
-    }
-
-    // Todo correcto
-    document.getElementById('audioSuccess').play();
-    alert('✅ Recepción guardada correctamente.');
-
-    // Reiniciar todo
-    this.reset();
-    generarFolio();
-    document.querySelectorAll('.preview-img').forEach(img => img.style.display = 'none');
-    const fecha = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('fechaHoy').textContent = "Fecha: " + fecha;
-    document.getElementById('clausulasLegales').value = JSON.parse(localStorage.getItem('configuracionTaller'))?.clausulas || "No nos responsabilizamos por la integridad de piezas plásticas resecas, deterioradas o quebradizas del motor que puedan deshacerse al manipularse.";
   });
+
+  document.getElementById('recepcionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('bipSuccess').play();
+    alert('✅ Recepción Guardada Correctamente');
+
+    this.reset();
+    previews.forEach(p => document.getElementById(p.img).style.display = 'none');
+  });
+});
 </script>
 
 </body>
