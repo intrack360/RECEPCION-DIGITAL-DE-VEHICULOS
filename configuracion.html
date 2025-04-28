@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración del Taller - Intrack360</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 1rem;
+      background: #f7f9fc;
+    }
+    h1 {
+      text-align: center;
+      color: #0d47a1;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    input[type="file"] {
+      margin-top: 0.5rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 10px 20px;
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #1565c0;
+    }
+    .preview {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .preview img {
+      max-height: 80px;
+    }
+    .fixed-logo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 90px;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://github.com/intrack360/RECEPCION-DIGITAL-DE-VEHICULOS/blob/main/logo%20INTRACK%20360.png?raw=true" alt="Intrack360" class="fixed-logo">
+
+  <h1>Configuración del Taller</h1>
+
+  <form id="configForm">
+    <label for="nombreTaller">Nombre del Taller:</label>
+    <input type="text" id="nombreTaller" placeholder="Ej. Taller Mecánico Juan">
+
+    <label for="logoTaller">Subir Logo del Taller:</label>
+    <input type="file" id="logoTaller" accept="image/*">
+
+    <div class="preview">
+      <p>Vista previa del logo:</p>
+      <img id="previewLogo" src="#" alt="Logo del taller" style="display:none;">
+    </div>
+
+    <label for="clausulas">Condiciones Generales (Cláusulas):</label>
+    <textarea id="clausulas" rows="10" placeholder="Escribe aquí las condiciones generales..."></textarea>
+
+    <button type="button" onclick="guardarConfiguracion()">Guardar Configuración</button>
+  </form>
+
+  <script>
+    const logoInput = document.getElementById('logoTaller');
+    const previewLogo = document.getElementById('previewLogo');
+
+    logoInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewLogo.src = e.target.result;
+          previewLogo.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function guardarConfiguracion() {
+      const nombre = document.getElementById('nombreTaller').value;
+      const clausulas = document.getElementById('clausulas').value;
+      const logoSrc = previewLogo.src;
+
+      if (!nombre || !clausulas || logoSrc === "#") {
+        alert("Por favor, completa todos los campos y sube un logo.");
+        return;
+      }
+
+      const configuracion = {
+        nombreTaller: nombre,
+        clausulas: clausulas,
+        logo: logoSrc
+      };
+
+      localStorage.setItem('configuracionTaller', JSON.stringify(configuracion));
+      alert('✅ Configuración guardada exitosamente (modo prueba)');
+    }
+  </script>
+
+</body>
+</html>
