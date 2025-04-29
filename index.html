@@ -119,43 +119,36 @@
     <textarea id="observaciones" rows="4" placeholder="Observaciones del cliente"></textarea>
   </div>
 
-  <div class="seccion">
-    <h2>Evidencias Fotográficas</h2>
+<!-- Foto Frente -->
+<label>Foto Frente:</label><br>
+<input type="file" id="fotoFrente" onchange="mostrarVistaPrevia(this, 'previewfotoFrente')"><br>
+<img id="previewfotoFrente" style="display:none; width: 100px; margin-top: 5px;"><br><br>
 
-    <div class="recuadro-evidencia">
-      <label>Foto Frente:</label><br>
-      <input type="file" id="fotoFrente" accept="image/*" capture="environment">
-      <img id="previewFrente" class="foto-preview" style="display:none;">
-    </div>
+<!-- Foto Trasera -->
+<label>Foto Trasera:</label><br>
+<input type="file" id="fotoTrasera" onchange="mostrarVistaPrevia(this, 'previewfotoTrasera')"><br>
+<img id="previewfotoTrasera" style="display:none; width: 100px; margin-top: 5px;"><br><br>
 
-    <div class="recuadro-evidencia">
-      <label>Foto Trasera:</label><br>
-      <input type="file" id="fotoTrasera" accept="image/*" capture="environment">
-      <img id="previewTrasera" class="foto-preview" style="display:none;">
-    </div>
+<!-- Foto Lado Derecho -->
+<label>Foto Lado Derecho:</label><br>
+<input type="file" id="fotoDerecho" onchange="mostrarVistaPrevia(this, 'previewfotoDerecho')"><br>
+<img id="previewfotoDerecho" style="display:none; width: 100px; margin-top: 5px;"><br><br>
 
-    <div class="recuadro-evidencia">
-      <label>Foto Lado Derecho:</label><br>
-      <input type="file" id="fotoDerecho" accept="image/*" capture="environment">
-      <img id="previewDerecho" class="foto-preview" style="display:none;">
-    </div>
+<!-- Foto Lado Izquierdo -->
+<label>Foto Lado Izquierdo:</label><br>
+<input type="file" id="fotoIzquierdo" onchange="mostrarVistaPrevia(this, 'previewfotoIzquierdo')"><br>
+<img id="previewfotoIzquierdo" style="display:none; width: 100px; margin-top: 5px;"><br><br>
 
-    <div class="recuadro-evidencia">
-      <label>Foto Lado Izquierdo:</label><br>
-      <input type="file" id="fotoIzquierdo" accept="image/*" capture="environment">
-      <img id="previewIzquierdo" class="foto-preview" style="display:none;">
-    </div>
+<!-- Foto Llaves del Vehículo -->
+<label>Foto Llaves del Vehículo:</label><br>
+<input type="file" id="fotoLlaves" onchange="mostrarVistaPrevia(this, 'previewfotoLlaves')"><br>
+<img id="previewfotoLlaves" style="display:none; width: 100px; margin-top: 5px;"><br><br>
 
-    <div class="recuadro-evidencia">
-      <label>Foto Llaves:</label><br>
-      <input type="file" id="fotoLlaves" accept="image/*" capture="environment">
-      <img id="previewLlaves" class="foto-preview" style="display:none;">
-    </div>
+<!-- Foto Batería del Vehículo -->
+<label>Foto Batería del Vehículo:</label><br>
+<input type="file" id="fotoBateria" onchange="mostrarVistaPrevia(this, 'previewfotoBateria')"><br>
+<img id="previewfotoBateria" style="display:none; width: 100px; margin-top: 5px;"><br><br>
 
-    <div class="recuadro-evidencia">
-      <label>Foto Batería:</label><br>
-      <input type="file" id="fotoBateria" accept="image/*" capture="environment">
-      <img id="previewBateria" class="foto-preview" style="display:none;">
     </div>
 
   </div>
