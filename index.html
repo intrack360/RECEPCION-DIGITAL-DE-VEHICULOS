@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recepción de Vehículos - Intrack360</title>
+  <title>Recepción Digital de Vehículos - Intrack360</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-      padding: 20px;
       margin: 0;
+      padding: 20px;
     }
     .header {
       display: flex;
@@ -17,7 +17,7 @@
       align-items: center;
     }
     .header img {
-      width: 100px;
+      width: 90px;
     }
     h1 {
       text-align: center;
@@ -28,7 +28,7 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 900px;
+      max-width: 950px;
       margin: auto;
     }
     input, textarea, select {
@@ -58,9 +58,9 @@
       background-color: #135ba1;
     }
     .small-text {
-      color: gray;
-      font-size: 0.9em;
-      margin-top: 10px;
+      color: #666;
+      font-size: 12px;
+      margin-top: 5px;
     }
     .recuadro-evidencia {
       border: 1px dashed #1976d2;
@@ -69,10 +69,15 @@
       border-radius: 8px;
       text-align: center;
     }
+    .mensajePlacas {
+      font-size: 13px;
+      color: #666;
+      margin-top: 5px;
+      display: none;
+    }
   </style>
 </head>
 <body>
-
 <div class="header">
   <h1>Recepción de Vehículos</h1>
   <img src="https://github.com/intrack360/RECEPCION-DIGITAL-DE-VEHICULOS/blob/main/logo%20INTRACK%20360.png?raw=true" alt="Logo Intrack360">
@@ -94,7 +99,8 @@
     <input type="text" id="anioVehiculo" placeholder="Año" required>
     <input type="text" id="motorVehiculo" placeholder="Motor" required>
     <input type="text" id="cilindradaVehiculo" placeholder="Cilindrada" required>
-    <input type="text" id="placasVehiculo" placeholder="Placas" required>
+    <input type="text" id="placasVehiculo" placeholder="Placas (sin guiones ni espacios)" required oninput="buscarPlacas()">
+    <div id="mensajePlacas" class="mensajePlacas">Placas no registradas. Ingresar datos nuevos.</div>
   </div>
 
   <div class="seccion">
@@ -111,7 +117,7 @@
 
   <div class="seccion">
     <h2>Evidencias Fotográficas</h2>
-    
+
     <div class="recuadro-evidencia">
       <label>Foto Frente:</label><br>
       <input type="file" id="fotoFrente" accept="image/*" capture="environment">
@@ -147,6 +153,7 @@
       <input type="file" id="fotoBateria" accept="image/*" capture="environment">
       <img id="previewBateria" class="foto-preview" style="display:none;">
     </div>
+
   </div>
 
   <div class="seccion">
@@ -161,48 +168,88 @@ El taller no se hace responsable por elementos no declarados al momento de ingre
 No nos responsabilizamos por la integridad de piezas plásticas resecas, deterioradas o quebradizas del motor que puedan deshacerse al manipularse.
 Después de 24 horas de avisado de la terminación, o 48 horas de abandono del seguimiento por parte del cliente, la pensión del vehículo será de $50.00 pesos por día.
 El taller no se hace responsable de daños meteorológicos, vandalismo o causas externas en autos abandonados.
-Estas cláusulas pueden ser modificadas en la configuración inicial del taller.
     </textarea>
+    <div class="small-text">Estas cláusulas pueden ser modificadas en la configuración inicial del taller.</div>
   </div>
 
   <button type="submit">Guardar Recepción</button>
 </form>
 
 <audio id="bipSuccess" src="https://assets.mixkit.co/active_storage/sfx/1106/1106-preview.mp3"></audio>
-
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Previsualización de imágenes
-  const previews = [
-    {input: 'fotoFrente', img: 'previewFrente'},
-    {input: 'fotoTrasera', img: 'previewTrasera'},
-    {input: 'fotoDerecho', img: 'previewDerecho'},
-    {input: 'fotoIzquierdo', img: 'previewIzquierdo'},
-    {input: 'fotoLlaves', img: 'previewLlaves'},
-    {input: 'fotoBateria', img: 'previewBateria'},
-  ];
-
-  previews.forEach(preview => {
-    document.getElementById(preview.input).addEventListener('change', function() {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById(preview.img).src = e.target.result;
-        document.getElementById(preview.img).style.display = 'block';
-      }
-      reader.readAsDataURL(this.files[0]);
-    });
-  });
-
+  let registros = {};
+  
+  function buscarPlacas() {
+    const placas = document.getElementById('placasVehiculo').value.trim().toUpperCase();
+    const mensaje = document.getElementById('mensajePlacas');
+  
+    if (placas && registros[placas]) {
+      const datos = registros[placas];
+      document.getElementById('nombreCliente').value = datos.nombreCliente;
+      document.getElementById('telefonoCliente').value = datos.telefonoCliente;
+      document.getElementById('poblacionCliente').value = datos.poblacionCliente;
+      document.getElementById('marcaVehiculo').value = datos.marcaVehiculo;
+      document.getElementById('modeloVehiculo').value = datos.modeloVehiculo;
+      document.getElementById('anioVehiculo').value = datos.anioVehiculo;
+      document.getElementById('motorVehiculo').value = datos.motorVehiculo;
+      document.getElementById('cilindradaVehiculo').value = datos.cilindradaVehiculo;
+      mensaje.style.display = "none";
+    } else if (placas) {
+      mensaje.style.display = "block";
+    } else {
+      mensaje.style.display = "none";
+    }
+  }
+  
   document.getElementById('recepcionForm').addEventListener('submit', function(e) {
     e.preventDefault();
+  
+    const nombreCliente = document.getElementById('nombreCliente').value.trim();
+    const telefonoCliente = document.getElementById('telefonoCliente').value.trim();
+    const poblacionCliente = document.getElementById('poblacionCliente').value.trim();
+    const marcaVehiculo = document.getElementById('marcaVehiculo').value.trim();
+    const modeloVehiculo = document.getElementById('modeloVehiculo').value.trim();
+    const anioVehiculo = document.getElementById('anioVehiculo').value.trim();
+    const motorVehiculo = document.getElementById('motorVehiculo').value.trim();
+    const cilindradaVehiculo = document.getElementById('cilindradaVehiculo').value.trim();
+    const placasVehiculo = document.getElementById('placasVehiculo').value.trim().toUpperCase();
+    const presupuesto = parseFloat(document.getElementById('presupuesto').value);
+    const anticipo = parseFloat(document.getElementById('anticipo').value);
+    const fechaEntregaEstimada = document.getElementById('fechaEntregaEstimada').value.trim();
+    const observaciones = document.getElementById('observaciones').value.trim();
+    const clausulas = document.getElementById('clausulas').value.trim();
+  
+    if (!placasVehiculo) {
+      alert('🚫 Debes ingresar las placas del vehículo.');
+      return;
+    }
+  
+    registros[placasVehiculo] = {
+      nombreCliente,
+      telefonoCliente,
+      poblacionCliente,
+      marcaVehiculo,
+      modeloVehiculo,
+      anioVehiculo,
+      motorVehiculo,
+      cilindradaVehiculo,
+      placasVehiculo,
+      presupuesto,
+      anticipo,
+      fechaEntregaEstimada,
+      observaciones,
+      clausulas
+    };
+  
     document.getElementById('bipSuccess').play();
-    alert('✅ Recepción Guardada Correctamente');
-
-    this.reset();
-    previews.forEach(p => document.getElementById(p.img).style.display = 'none');
+    alert('✅ Recepción guardada exitosamente.');
+  
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   });
-});
-</script>
-
-</body>
-</html>
+  </script>
+  
+  </body>
+  </html>
+  
