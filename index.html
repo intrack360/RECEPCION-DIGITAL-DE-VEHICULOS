@@ -273,6 +273,20 @@ El taller no se hace responsable de daños meteorológicos, vandalismo o causas 
     localStorage.setItem("ultimoFolioTaller", nuevoFolio);
   });
 </script>
+<script>
+  function mostrarVistaPrevia(input, idImagen) {
+    const archivo = input.files[0];
+    if (archivo) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const imgPreview = document.getElementById(idImagen);
+        imgPreview.src = e.target.result;
+        imgPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(archivo);
+    }
+  }
+</script>
 
   </body>
   </html>
