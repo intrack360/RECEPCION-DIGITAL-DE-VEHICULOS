@@ -253,7 +253,27 @@ El taller no se hace responsable de daños meteorológicos, vandalismo o causas 
     }, 1000);
   });
   </script>
-  
+  <script>
+  // Generar folio tipo TAL001-0001 automáticamente
+  document.addEventListener("DOMContentLoaded", () => {
+    const folioSpan = document.getElementById("folioActual");
+
+    // Obtener el último folio guardado en localStorage o iniciar desde 1
+    let ultimoFolio = localStorage.getItem("ultimoFolioTaller") || "TAL001-0000";
+
+    // Extraer el número actual y sumarle 1
+    const partes = ultimoFolio.split("-");
+    const nuevoNumero = String(parseInt(partes[1]) + 1).padStart(4, "0");
+    const nuevoFolio = `${partes[0]}-${nuevoNumero}`;
+
+    // Mostrar en pantalla
+    folioSpan.textContent = nuevoFolio;
+
+    // Guardar nuevo folio para siguiente vez
+    localStorage.setItem("ultimoFolioTaller", nuevoFolio);
+  });
+</script>
+
   </body>
   </html>
   
