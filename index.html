@@ -307,21 +307,25 @@
       reader.readAsDataURL(archivo);
     }
   }
-</script>
+
 <audio id="bitStart" src="https://assets.mixkit.co/active_storage/sfx/381/381-preview.mp3"></audio>
 <div id="leyendaPlacas" style="position:fixed; top:10px; right:10px; background:#fff3cd; border:1px solid #ffeeba; color:#856404; padding:10px 15px; border-radius:5px; font-size:14px; z-index:9999; box-shadow:0 2px 5px rgba(0,0,0,0.2); display:none;">
   EMPIEZA POR REGISTRAR LA PLACA, SI ESTÁ EN MI BASE TE RELLENARÉ LOS DATOS PRINCIPALES EN AUTOMÁTICO 👍
 </div>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const leyenda = document.getElementById("leyendaPlacas");
-  const audio = document.getElementById("bitStart");
-  leyenda.style.display = "block";
-  audio.play();
-  setTimeout(() => { leyenda.style.display = "none"; }, 5000);
-});
-</script>
 
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const leyenda = document.getElementById("leyendaPlacas");
+    const audio = document.getElementById("bitStart");
+
+    leyenda.style.display = "block";
+    audio.play();
+
+    setTimeout(() => {
+      leyenda.style.display = "none";
+    }, 5000);
+  });
+</script>
 
   </body>
   </html>
