@@ -106,6 +106,30 @@
     <input type="text" id="placasVehiculo" placeholder="Placas (sin guiones ni espacios)" required oninput="buscarPlacas()">
     <div id="mensajePlacas" class="mensajePlacas">Placas no registradas. Ingresar datos nuevos.</div>
   </div>
+<div class="seccion">
+  <h2>Inventario de Tablero y Combustible</h2>
+
+  <label for="nivelGasolina">Nivel de Gasolina:</label><br>
+  <select id="nivelGasolina" name="nivelGasolina" required>
+    <option value="">Seleccionar nivel...</option>
+    <option value="lleno">Lleno</option>
+    <option value="3/4">3/4</option>
+    <option value="1/2">1/2</option>
+    <option value="1/4">1/4</option>
+    <option value="vacío">Vacío</option>
+  </select><br><br>
+
+  <label>Testigos de Tablero Encendidos:</label><br>
+  <label><input type="checkbox" name="testigos[]" value="Check engine"> Check Engine</label><br>
+  <label><input type="checkbox" name="testigos[]" value="Batería"> Batería</label><br>
+  <label><input type="checkbox" name="testigos[]" value="Aceite"> Aceite</label><br>
+  <label><input type="checkbox" name="testigos[]" value="BRAKE"> BRAKE</label><br>
+  <label><input type="checkbox" name="testigos[]" value="CONTROL TRACCION"> CONTROL TRACCION</label><br>
+<label><input type="checkbox" name="testigos[]" value="ABS"> ABS</label><br>
+<label><input type="checkbox" name="testigos[]" value="CHECK ENGINE"> CHECK ENGINE</label><br>
+<label><input type="checkbox" name="testigos[]" value="TPMS"> TPMS</label><br>
+  <label><input type="checkbox" name="testigos[]" value="Otro"> Otro</label><br><br>
+</div>
 
   <div class="seccion">
     <h2>Presupuesto y Anticipo</h2>
