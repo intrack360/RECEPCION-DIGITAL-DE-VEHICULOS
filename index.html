@@ -22,6 +22,13 @@
     h1 {
       text-align: center;
       color: #1976d2;
+      flex-grow: 1;
+    }
+    .folio-info {
+      font-size: 0.9em;
+      color: #444;
+      text-align: right;
+      margin-bottom: 10px;
     }
     form {
       background: white;
@@ -41,10 +48,11 @@
     .seccion {
       margin-bottom: 20px;
     }
-    .foto-preview {
-      max-height: 100px;
+    .mensajePlacas {
+      font-size: 13px;
+      color: #666;
       margin-top: 5px;
-      display: block;
+      display: none;
     }
     button {
       background-color: #1976d2;
@@ -57,257 +65,169 @@
     button:hover {
       background-color: #135ba1;
     }
-    .small-text {
-      color: #666;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    .recuadro-evidencia {
-      border: 1px dashed #1976d2;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      text-align: center;
-    }
-    .mensajePlacas {
-      font-size: 13px;
-      color: #666;
-      margin-top: 5px;
-      display: none;
-    }
   </style>
 </head>
 <body>
-<div class="header">
-  <h1>Recepción de Vehículos</h1>
-  <img src="https://github.com/intrack360/RECEPCION-DIGITAL-DE-VEHICULOS/blob/main/logo%20INTRACK%20360.png?raw=true" alt="Logo Intrack360">
-</div>
-
-<div style="text-align:center; margin-top:10px; font-size:18px; font-weight:bold;">
-  Folio Actual: <span id="folioActual">Cargando...</span>
-</div>
-
-<form id="recepcionForm">
-  
-  <div class="seccion">
-    <h2>Datos del Cliente</h2>
-    <input type="text" id="nombreCliente" placeholder="Nombre completo" required>
-    <input type="text" id="telefonoCliente" placeholder="Teléfono" required>
-    <input type="text" id="poblacionCliente" placeholder="Población" required>
+  <div class="header">
+    <h1>Recepción de Vehículos</h1>
+    <img src="https://github.com/intrack360/RECEPCION-DIGITAL-DE-VEHICULOS/blob/main/logo%20INTRACK%20360.png?raw=true" alt="Logo Intrack360">
   </div>
-
-  <div class="seccion">
-    <h2>Datos del Vehículo</h2>
-    <input type="text" id="marcaVehiculo" placeholder="Marca" required>
-    <input type="text" id="modeloVehiculo" placeholder="Modelo" required>
-    <input type="text" id="anioVehiculo" placeholder="Año" required>
-    <input type="text" id="motorVehiculo" placeholder="Motor" required>
-    <input type="text" id="cilindradaVehiculo" placeholder="Cilindrada" required>
-    <input type="text" id="placasVehiculo" placeholder="Placas (sin guiones ni espacios)" required oninput="buscarPlacas()">
-    <div id="mensajePlacas" class="mensajePlacas">Placas no registradas. Ingresar datos nuevos.</div>
-  </div>
-<div class="seccion">
-  <h2>Inventario de Tablero y Combustible</h2>
-
-  <label for="nivelGasolina">Nivel de Gasolina:</label><br>
-  <select id="nivelGasolina" name="nivelGasolina" required>
-    <option value="">Seleccionar nivel...</option>
-    <option value="lleno">Lleno</option>
-    <option value="3/4">3/4</option>
-    <option value="1/2">1/2</option>
-    <option value="1/4">1/4</option>
-    <option value="vacío">Vacío</option>
-  </select><br><br>
-
-  <label>Testigos de Tablero Encendidos:</label><br>
-  <label><input type="checkbox" name="testigos[]" value="Check engine"> CHECK ENGINE</label><br>
-  <label><input type="checkbox" name="testigos[]" value="Batería"> BATERIA</label><br>
-  <label><input type="checkbox" name="testigos[]" value="Aceite"> ACEITE</label><br>
-  <label><input type="checkbox" name="testigos[]" value="BRAKE"> BRAKE</label><br>
-  <label><input type="checkbox" name="testigos[]" value="CONTROL TRACCION"> CONTROL TRACCION</label><br>
-<label><input type="checkbox" name="testigos[]" value="ABS"> ABS</label><br>
-<label><input type="checkbox" name="testigos[]" value="CHECK ENGINE"> CHECK ENGINE</label><br>
-<label><input type="checkbox" name="testigos[]" value="TPMS"> TPMS</label><br>
-</div>
-
-  <div class="seccion">
-    <h2>Presupuesto y Anticipo</h2>
-    <input type="number" id="presupuesto" placeholder="Presupuesto estimado" required>
-    <input type="number" id="anticipo" placeholder="Anticipo recibido" required>
-    <input type="text" id="fechaEntregaEstimada" placeholder="Fecha estimada de entrega (opcional)">
-  </div>
-
-  <div class="seccion">
-    <h2>Observaciones</h2>
-    <textarea id="observaciones" rows="4" placeholder="Aqui puedes anotar si el auto llego desarmado, desbielado, no enciende y que no puedes probarlo para garantizarle los demas sistemas"></textarea>
-  </div>
-
-</div>
-
-<!-- Foto Frente -->
-<label>Foto Frente:</label><br>
-<input type="file" id="fotoFrente" onchange="mostrarVistaPrevia(this, 'previewfotoFrente')"><br>
-<img id="previewfotoFrente" style="display:none; width: 100px; margin-top: 5px;"><br><br>
-
-<!-- Foto Trasera -->
-<label>Foto Trasera:</label><br>
-<input type="file" id="fotoTrasera" onchange="mostrarVistaPrevia(this, 'previewfotoTrasera')"><br>
-<img id="previewfotoTrasera" style="display:none; width: 100px; margin-top: 5px;"><br><br>
-
-<!-- Foto Lado Derecho -->
-<label>Foto Lado Derecho:</label><br>
-<input type="file" id="fotoDerecho" onchange="mostrarVistaPrevia(this, 'previewfotoDerecho')"><br>
-<img id="previewfotoDerecho" style="display:none; width: 100px; margin-top: 5px;"><br><br>
-
-<!-- Foto Lado Izquierdo -->
-<label>Foto Lado Izquierdo:</label><br>
-<input type="file" id="fotoIzquierdo" onchange="mostrarVistaPrevia(this, 'previewfotoIzquierdo')"><br>
-<img id="previewfotoIzquierdo" style="display:none; width: 100px; margin-top: 5px;"><br><br>
-
-<!-- Foto Llaves del Vehículo -->
-<label>Foto Llaves del Vehículo:</label><br>
-<input type="file" id="fotoLlaves" onchange="mostrarVistaPrevia(this, 'previewfotoLlaves')"><br>
-<img id="previewfotoLlaves" style="display:none; width: 100px; margin-top: 5px;"><br><br>
-
-<!-- Foto Batería del Vehículo -->
-<label>Foto Batería del Vehículo:</label><br>
-<input type="file" id="fotoBateria" onchange="mostrarVistaPrevia(this, 'previewfotoBateria')"><br>
-<img id="previewfotoBateria" style="display:none; width: 100px; margin-top: 5px;"><br><br>
-
+  <div class="folio-info">Folio actual: <span id="folioActual">Cargando...</span></div>
+  <form id="recepcionForm">
+    <div class="seccion">
+      <h2>Identificación del Vehículo</h2>
+      <input type="text" id="placasVehiculo" placeholder="Placas" required oninput="buscarPlacas()">
+      <div id="mensajePlacas" class="mensajePlacas">Placas no registradas. Ingresar datos nuevos.</div>
     </div>
-
-  </div>
-
-  <div class="seccion">
-    <h2>Video del Vehículo</h2>
-    <input type="file" id="videoVehiculo" accept="video/*" capture="environment">
-  </div>
-<!-- Observación libre adicional -->
-<div class="seccion">
-  <textarea id="observacionLibre" name="observacionLibre" rows="2" placeholder="Escribe aquí cualquier detalle adicional no contemplado en los campos prediseñados..." style="width:100%; resize: vertical;"></textarea>
-</div>
-
-  <div class="seccion" style="margin-top: 30px;">
-  <h2 style="margin-bottom: 10px;">Condiciones Generales (Cláusulas):</h2>
-  <div style="font-size: 0.67em; line-height: 1.5; color: #333; border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #f9f9f9;">
-    • El taller no se hace responsable por objetos no declarados. Si no se acepta el presupuesto, se cobrará diagnóstico, y el taller se obligara a tratar de entregar el vehiculo como fue recibido, o desarmado si se requirio.exceptuando las consecuencias inevitables de la revision por el estado de deterioro de las piezas.<br>
-    • Después de 24 horas de avisado de la terminaciónde su trabajo, o 48 horas de abandono del seguimiento por parte del cliente, la pensión del vehículo será de $50.00 pesos por día.El taller no se hace responsable de daños meteorológicos, vandalismo o causas externas en autos abandonados.<br>
-    • No nos responsabilizamos por la integridad de piezas resecas, deterioradas o quebradizas del motor que puedan fracturarse al manipularse, como uniones tomas de agua ductos de plastico.
-  </div>
-  </div>
-
-  <button type="submit">Guardar Recepción</button>
-</form>
-
-<audio id="bipSuccess" src="https://assets.mixkit.co/active_storage/sfx/1106/1106-preview.mp3"></audio>
-<script>
-  let registros = {};
-  
-  function buscarPlacas() {
-    const placas = document.getElementById('placasVehiculo').value.trim().toUpperCase();
-    const mensaje = document.getElementById('mensajePlacas');
-  
-    if (placas && registros[placas]) {
-      const datos = registros[placas];
-      document.getElementById('nombreCliente').value = datos.nombreCliente;
-      document.getElementById('telefonoCliente').value = datos.telefonoCliente;
-      document.getElementById('poblacionCliente').value = datos.poblacionCliente;
-      document.getElementById('marcaVehiculo').value = datos.marcaVehiculo;
-      document.getElementById('modeloVehiculo').value = datos.modeloVehiculo;
-      document.getElementById('anioVehiculo').value = datos.anioVehiculo;
-      document.getElementById('motorVehiculo').value = datos.motorVehiculo;
-      document.getElementById('cilindradaVehiculo').value = datos.cilindradaVehiculo;
-      mensaje.style.display = "none";
-    } else if (placas) {
-      mensaje.style.display = "block";
-    } else {
-      mensaje.style.display = "none";
-    }
-  }
-  
-  document.getElementById('recepcionForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-  
-    const nombreCliente = document.getElementById('nombreCliente').value.trim();
-    const telefonoCliente = document.getElementById('telefonoCliente').value.trim();
-    const poblacionCliente = document.getElementById('poblacionCliente').value.trim();
-    const marcaVehiculo = document.getElementById('marcaVehiculo').value.trim();
-    const modeloVehiculo = document.getElementById('modeloVehiculo').value.trim();
-    const anioVehiculo = document.getElementById('anioVehiculo').value.trim();
-    const motorVehiculo = document.getElementById('motorVehiculo').value.trim();
-    const cilindradaVehiculo = document.getElementById('cilindradaVehiculo').value.trim();
-    const placasVehiculo = document.getElementById('placasVehiculo').value.trim().toUpperCase();
-    const presupuesto = parseFloat(document.getElementById('presupuesto').value);
-    const anticipo = parseFloat(document.getElementById('anticipo').value);
-    const fechaEntregaEstimada = document.getElementById('fechaEntregaEstimada').value.trim();
-    const observaciones = document.getElementById('observaciones').value.trim();
-    const clausulas = document.getElementById('clausulas').value.trim();
-  
-    if (!placasVehiculo) {
-      alert('🚫 Debes ingresar las placas del vehículo.');
-      return;
-    }
-  
-    registros[placasVehiculo] = {
-      nombreCliente,
-      telefonoCliente,
-      poblacionCliente,
-      marcaVehiculo,
-      modeloVehiculo,
-      anioVehiculo,
-      motorVehiculo,
-      cilindradaVehiculo,
-      placasVehiculo,
-      presupuesto,
-      anticipo,
-      fechaEntregaEstimada,
-      observaciones,
-      clausulas
-    };
-  
-    document.getElementById('bipSuccess').play();
-    alert('✅ Recepción guardada exitosamente.');
-  
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  });
-  </script>
+    <div class="seccion">
+      <h2>Datos del Cliente</h2>
+      <input type="text" id="nombreCliente" placeholder="Nombre completo" required>
+      <input type="text" id="telefonoCliente" placeholder="Teléfono" required>
+      <input type="text" id="poblacionCliente" placeholder="Población" required>
+    </div>
+    <div class="seccion">
+      <h2>Datos del Vehículo</h2>
+      <input type="text" id="marcaVehiculo" placeholder="Marca" required>
+      <input type="text" id="modeloVehiculo" placeholder="Modelo" required>
+      <input type="text" id="anioVehiculo" placeholder="Año" required>
+      <input type="text" id="motorVehiculo" placeholder="Motor" required>
+      <input type="text" id="cilindradaVehiculo" placeholder="Cilindrada" required>
+    </div>
+    <div class="seccion">
+      <h2>Inventario Tablero y Gasolina</h2>
+      <label for="nivelGasolina">Nivel de Gasolina:</label>
+      <select id="nivelGasolina" name="nivelGasolina" required>
+        <option value="">Seleccionar nivel...</option>
+        <option value="Lleno">Lleno</option>
+        <option value="7/8">7/8</option>
+        <option value="3/4">3/4</option>
+        <option value="5/8">5/8</option>
+        <option value="1/2">1/2</option>
+        <option value="3/8">3/8</option>
+        <option value="1/4">1/4</option>
+        <option value="1/8">1/8</option>
+        <option value="Vacío">Vacío</option>
+      </select>
+      <label>Testigos Encendidos:</label><br>
+      <label><input type="checkbox" name="testigos[]" value="CHECK ENGINE"> Check Engine</label><br>
+      <label><input type="checkbox" name="testigos[]" value="BATERIA"> Batería</label><br>
+      <label><input type="checkbox" name="testigos[]" value="ACEITE"> Aceite</label><br>
+      <label><input type="checkbox" name="testigos[]" value="BRAKE"> Brake</label><br>
+      <label><input type="checkbox" name="testigos[]" value="CONTROL TRACCION"> Control Tracción</label><br>
+      <label><input type="checkbox" name="testigos[]" value="ABS"> ABS</label><br>
+      <label><input type="checkbox" name="testigos[]" value="TPMS"> TPMS</label><br>
+      <label>Otro: <input type="text" name="testigoOtro" placeholder=""></label>
+    </div>
+    <div class="seccion">
+      <h2>Presupuesto y Anticipo</h2>
+      <input type="number" id="presupuesto" placeholder="$0.00" required>
+      <input type="number" id="anticipo" placeholder="$0.00" required>
+      <input type="text" id="fechaEntregaEstimada" placeholder="Fecha estimada de entrega (opcional)">
+    </div>
+    <div class="seccion">
+      <h2>Observaciones</h2>
+      <textarea id="observaciones" rows="4"></textarea>
+    </div>
+    <div class="seccion">
+      <textarea id="observacionLibre" rows="2" placeholder="Escribe aquí cualquier detalle adicional no contemplado en los campos prediseñados..."></textarea>
+    </div>
+    <div class="seccion">
+      <h2>Imágenes del Vehículo</h2>
+      <label>Foto Frente:</label>
+      <input type="file" id="fotoFrente" accept="image/*" required><br>
+      <label>Foto Trasera:</label>
+      <input type="file" id="fotoTrasera" accept="image/*" required><br>
+      <label>Foto Lado Derecho:</label>
+      <input type="file" id="fotoDerecho" accept="image/*" required><br>
+      <label>Foto Lado Izquierdo:</label>
+      <input type="file" id="fotoIzquierdo" accept="image/*" required><br>
+      <label>Foto Llaves:</label>
+      <input type="file" id="fotoLlaves" accept="image/*" required><br>
+      <label>Foto Batería:</label>
+      <input type="file" id="fotoBateria" accept="image/*" required><br>
+    </div>
+    <div class="seccion">
+      <h2>Video del Vehículo (opcional)</h2>
+      <input type="file" id="videoVehiculo" accept="video/*">
+    </div>
+    <div class="seccion">
+      <h2>Condiciones Generales (Cláusulas):</h2>
+      <div style="font-size: 0.85em; line-height: 1.6; background: #f9f9f9; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+        <ul style="padding-left: 20px;">
+          <li>El taller no se hace responsable por objetos no declarados. Si no se acepta el presupuesto, se cobrará diagnóstico, y el taller se obligará a tratar de entregar el vehículo como fue recibido, o desarmado si se requirió, exceptuando las consecuencias inevitables de la revisión por el estado de deterioro de las piezas.</li>
+          <li>Después de 24 horas de avisado de la terminación de su trabajo, o 48 horas de abandono del seguimiento por parte del cliente, la pensión del vehículo será de $50.00 pesos por día. El taller no se hace responsable de daños meteorológicos, vandalismo o causas externas en autos abandonados.</li>
+          <li>No nos responsabilizamos por la integridad de piezas resecas, deterioradas o quebradizas del motor que puedan fracturarse al manipularse, como uniones tomas de agua o ductos de plástico.</li>
+        </ul>
+      </div>
+    </div>
+    <button type="submit">Guardar Recepción</button>
+  </form>
+  <audio id="bipSuccess" src="https://assets.mixkit.co/active_storage/sfx/1106/1106-preview.mp3"></audio>
   <script>
-  // Generar folio tipo TAL001-0001 automáticamente
-  document.addEventListener("DOMContentLoaded", () => {
-    const folioSpan = document.getElementById("folioActual");
-
-    // Obtener el último folio guardado en localStorage o iniciar desde 1
-    let ultimoFolio = localStorage.getItem("ultimoFolioTaller") || "TAL001-0000";
-
-    // Extraer el número actual y sumarle 1
-    const partes = ultimoFolio.split("-");
-    const nuevoNumero = String(parseInt(partes[1]) + 1).padStart(4, "0");
-    const nuevoFolio = `${partes[0]}-${nuevoNumero}`;
-
-    // Mostrar en pantalla
-    folioSpan.textContent = nuevoFolio;
-
-    // Guardar nuevo folio para siguiente vez
-    localStorage.setItem("ultimoFolioTaller", nuevoFolio);
-  });
-</script>
-<script>
-  function mostrarVistaPrevia(input, idImagen) {
-    const archivo = input.files[0];
-    if (archivo) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imgPreview = document.getElementById(idImagen);
-        imgPreview.src = e.target.result;
-        imgPreview.style.display = 'block';
-      };
-      reader.readAsDataURL(archivo);
+    let registros = {};
+    function buscarPlacas() {
+      const placas = document.getElementById('placasVehiculo').value.trim().toUpperCase();
+      const mensaje = document.getElementById('mensajePlacas');
+      if (placas && registros[placas]) {
+        const datos = registros[placas];
+        document.getElementById('nombreCliente').value = datos.nombreCliente;
+        document.getElementById('telefonoCliente').value = datos.telefonoCliente;
+        document.getElementById('poblacionCliente').value = datos.poblacionCliente;
+        document.getElementById('marcaVehiculo').value = datos.marcaVehiculo;
+        document.getElementById('modeloVehiculo').value = datos.modeloVehiculo;
+        document.getElementById('anioVehiculo').value = datos.anioVehiculo;
+        document.getElementById('motorVehiculo').value = datos.motorVehiculo;
+        document.getElementById('cilindradaVehiculo').value = datos.cilindradaVehiculo;
+        mensaje.style.display = "none";
+      } else if (placas) {
+        mensaje.style.display = "block";
+      } else {
+        mensaje.style.display = "none";
+      }
     }
-  }
-</script>
-
-  </body>
-  </html>
-
+    document.addEventListener("DOMContentLoaded", () => {
+      const folioSpan = document.getElementById("folioActual");
+      let ultimoFolio = localStorage.getItem("ultimoFolioTaller") || "TAL001-0000";
+      folioSpan.textContent = ultimoFolio;
+      const guardados = localStorage.getItem("vehiculosRegistrados");
+      if (guardados) registros = JSON.parse(guardados);
+    });
+    document.getElementById('recepcionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const placasVehiculo = document.getElementById('placasVehiculo').value.trim().toUpperCase();
+      if (!placasVehiculo) return alert('Debes ingresar las placas.');
+      let ultimoFolio = localStorage.getItem("ultimoFolioTaller") || "TAL001-0000";
+      let partes = ultimoFolio.split("-");
+      let nuevoNumero = String(parseInt(partes[1]) + 1).padStart(4, "0");
+      let nuevoFolio = `${partes[0]}-${nuevoNumero}`;
+      localStorage.setItem("ultimoFolioTaller", nuevoFolio);
+      document.getElementById("folioActual").textContent = nuevoFolio;
+      registros[placasVehiculo] = {
+        nombreCliente: document.getElementById('nombreCliente').value.trim(),
+        telefonoCliente: document.getElementById('telefonoCliente').value.trim(),
+        poblacionCliente: document.getElementById('poblacionCliente').value.trim(),
+        marcaVehiculo: document.getElementById('marcaVehiculo').value.trim(),
+        modeloVehiculo: document.getElementById('modeloVehiculo').value.trim(),
+        anioVehiculo: document.getElementById('anioVehiculo').value.trim(),
+        motorVehiculo: document.getElementById('motorVehiculo').value.trim(),
+        cilindradaVehiculo: document.getElementById('cilindradaVehiculo').value.trim(),
+        nivelGasolina: document.getElementById('nivelGasolina').value,
+        testigos: Array.from(document.querySelectorAll('input[name="testigos[]"]:checked')).map(t => t.value),
+        testigoOtro: document.querySelector('input[name="testigoOtro"]').value.trim(),
+        placasVehiculo,
+        presupuesto: parseFloat(document.getElementById('presupuesto').value),
+        anticipo: parseFloat(document.getElementById('anticipo').value),
+        fechaEntregaEstimada: document.getElementById('fechaEntregaEstimada').value.trim(),
+        observaciones: document.getElementById('observaciones').value.trim(),
+        observacionLibre: document.getElementById('observacionLibre').value.trim(),
+        folio: nuevoFolio,
+        fechaRecepcion: new Date().toLocaleString()
+      };
+      localStorage.setItem("vehiculosRegistrados", JSON.stringify(registros));
+      document.getElementById('bipSuccess').play();
+      alert('Recepción guardada con éxito. Folio: ' + nuevoFolio);
+      setTimeout(() => window.location.reload(), 1000);
+    });
+  </script>
+</body>
+</html>
