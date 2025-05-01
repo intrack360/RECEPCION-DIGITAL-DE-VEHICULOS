@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Recepción de Servicio - Intrack360</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      cursor: crosshair;
+    }
+    small {
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Formulario de Recepción de Servicio</h2>
+
+<form id="formRecepcion">
+  <!-- 🖋️ Firma Digital -->
+  <p><strong>Firma digital del cliente:</strong></p>
+  <canvas id="lienzoFirma" width="300" height="150"></canvas><br>
+  <button type="button" onclick="borrarFirma()">🧼 Borrar firma</button><br>
+  <small id="errorFirma" style="color:red; display:none;">⚠️ Se requiere la firma.</small>
+
+  <hr>
+
+  <!-- 🎤 Grabación de Voz -->
+  <p><strong>Grabación de aceptación por voz:</strong></p>
+  <button type="button" id="btnGrabar">🎙️ Iniciar / Detener grabación</button><br><br>
+  <audio id="audioGrabado" controls style="display:block; margin-top:10px;"></audio>
+  <small id="errorAudio" style="color:red; display:none;">⚠️ Se requiere la grabación de voz.</small>
+
+  <hr>
+
+  <!-- 📜 Legal -->
+  <p><strong>Texto legal:</strong></p>
+  <p style="font-size: 0.9em;">
+    Al firmar y grabar esta recepción, el cliente declara que ha recibido el servicio en conformidad, y otorga su consentimiento digital válido conforme a la normativa vigente.
+  </p>
+
+  <hr>
+
+  <!-- 📩 Botón de envío -->
+  <button type="submit">✅ Enviar Recepción</button>
+</form>
+
+<!-- ✅ Scripts -->
+<script>
+  // 🖋️ Firma con el mouse
+  const canvas = document.getElementById("lienzoFirma");
+  const ctx = canvas.getContext("2d");
+  let firmando = false;
+
+  canvas.addEventListener("mousedown", () => firmando = true);
+  canvas.addEventListener("mouseup", () => firmando = false);
+  canvas.addEventListener("mouseout", () => firmando = false);
+  canvas.addEventListener("mousemove", (e) => {
+    if (firmando) {
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#000";
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+  });
+
+  function borrarFirma() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+  }
+
+  // 🎤 Grabación de voz
+  let mediaRecorder;
+  let audioChunks = [];
+
+  document.getElementById("btnGrabar").addEventListener("click", async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/mp3" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audioElement = document.getElementById("audioGrabado");
+        audioElement.src = audioUrl;
+        audioChunks = [];
+      };
+
+      mediaRecorder.start();
+      alert("🎤 Grabando... Da clic de nuevo para detener.");
+    } else {
+      mediaRecorder.stop();
+      alert("🛑 Grabación detenida.");
+    }
+  });
+
+  // ✅ Validación antes de enviar
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("formRecepcion");
+    const audioElement = document.getElementById("audioGrabado");
+    const errorFirma = document.getElementById("errorFirma");
+    const errorAudio = document.getElementById("errorAudio");
+
+    form.addEventListener("submit", function (e) {
+      let errores = [];
+
+      errorFirma.style.display = "none";
+      errorAudio.style.display = "none";
+
+      // Validar firma
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let lienzoVacio = true;
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i + 3] !== 0) {
+          lienzoVacio = false;
+          break;
+        }
+      }
+
+      if (lienzoVacio) {
+        errores.push("⚠️ Se requiere la firma.");
+        errorFirma.style.display = "inline";
+        canvas.style.border = "2px solid red";
+      } else {
+        canvas.style.border = "";
+      }
+
+      // Validar audio
+      if (!audioElement.src || audioElement.src.length < 10) {
+        errores.push("⚠️ Se requiere la grabación de voz.");
+        errorAudio.style.display = "inline";
+        audioElement.style.border = "2px solid red";
+      } else {
+        audioElement.style.border = "";
+      }
+
+      if (errores.length > 0) {
+        e.preventDefault();
+        alert(errores.join("\n"));
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
