@@ -229,5 +229,50 @@
       setTimeout(() => window.location.reload(), 1000);
     });
   </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const canvas = document.getElementById("lienzoFirma");
+    const audioElement = document.getElementById("audioGrabado");
+    const errorFirma = document.getElementById("errorFirma");
+    const errorAudio = document.getElementById("errorAudio");
+
+    form.addEventListener("submit", function (e) {
+      let errores = [];
+
+      // Ocultar errores previos
+      errorFirma.style.display = "none";
+      errorAudio.style.display = "none";
+
+      // Validar firma
+      const ctx = canvas.getContext("2d");
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let lienzoVacio = true;
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i + 3] !== 0) {
+          lienzoVacio = false;
+          break;
+        }
+      }
+
+      if (lienzoVacio) {
+        errores.push("⚠️ Se requiere la firma.");
+        errorFirma.style.display = "inline";
+      }
+
+      // Validar audio
+      if (!audioElement.src || audioElement.src.length < 10) {
+        errores.push("⚠️ Se requiere la grabación de voz.");
+        errorAudio.style.display = "inline";
+      }
+
+      if (errores.length > 0) {
+        e.preventDefault();
+        alert(errores.join("\n"));
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
