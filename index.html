@@ -294,39 +294,45 @@
     localStorage.setItem("ultimoFolioTaller", nuevoFolio);
   });
 </script>
-<script>
-  function mostrarVistaPrevia(input, idImagen) {
-    const archivo = input.files[0];
-    if (archivo) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imgPreview = document.getElementById(idImagen);
-        imgPreview.src = e.target.result;
-        imgPreview.style.display = 'block';
-      };
-      reader.readAsDataURL(archivo);
-    }
-  }
-
-<audio id="bitStart" src="https://assets.mixkit.co/active_storage/sfx/381/381-preview.mp3"></audio>
+<!-- Elementos visuales y de audio para leyenda -->
+<audio id="bitStart" src="https://assets.mixkit.co/active_storage/sfx/381/381-preview.mp3" preload="auto"></audio>
 <div id="leyendaPlacas" style="position:fixed; top:10px; right:10px; background:#fff3cd; border:1px solid #ffeeba; color:#856404; padding:10px 15px; border-radius:5px; font-size:14px; z-index:9999; box-shadow:0 2px 5px rgba(0,0,0,0.2); display:none;">
   EMPIEZA POR REGISTRAR LA PLACA, SI ESTÁ EN MI BASE TE RELLENARÉ LOS DATOS PRINCIPALES EN AUTOMÁTICO 👍
 </div>
 
 <script>
-  window.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mostrar leyenda y reproducir sonido
     const leyenda = document.getElementById("leyendaPlacas");
     const audio = document.getElementById("bitStart");
 
     leyenda.style.display = "block";
-    audio.play();
+    if (audio) {
+      audio.play().catch(e => {
+        console.log("🔇 El navegador bloqueó el sonido automático:", e);
+      });
+    }
 
     setTimeout(() => {
       leyenda.style.display = "none";
     }, 5000);
+
+    // Folio persistente durante sesión
+    const folioSpan = document.getElementById("folioActual");
+    let ultimoFolio = localStorage.getItem("ultimoFolioTaller") || "TAL001-0000";
+
+    const partes = ultimoFolio.split("-");
+    const nuevoNumero = String(parseInt(partes[1]) + 1).padStart(4, "0");
+    const nuevoFolio = `${partes[0]}-${nuevoNumero}`;
+    folioSpan.textContent = nuevoFolio;
+
+    const folioMostrado = localStorage.getItem("folioMostrado");
+    if (folioMostrado !== nuevoFolio) {
+      localStorage.setItem("ultimoFolioTaller", nuevoFolio);
+      localStorage.setItem("folioMostrado", nuevoFolio);
+    }
   });
 </script>
-
 
   </body>
   </html>
